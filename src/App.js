@@ -1,47 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import { marked } from 'marked';
 import './App.css';
 
-function App() {
-  const [paras, setParas] = useState(4);
-  const [format, setFormat] = useState('text');
-  const [text, setText] = useState('');
+const helpText = `Heading
+=======
+Sub-heading
+-----------
+### Another deeper heading
 
-  const fetchText = async () => {
-    try {
-      const response = await axios.get(
-        `https://baconipsum.com/api/?type=all-meat&paras=${paras}&format=${format}`
-      );
-      setText(response.data);
-    } catch (error) {
-      console.error("Veri çekme hatası:", error);
-    }
+Paragraphs are separated by a blank line.
+Leave 2 spaces at the end of a line to do a line break
+
+Text attributes *italic*, **bold**, \`monospace\`, ~~strikethrough~~.
+
+Shopping list:
+  * apples
+  * oranges
+  * pears`;
+
+function App() {
+  const [text, setText] = useState("");
+
+  // Sağ üstteki soru işaretine basınca örnek metni doldurur
+  const handleHelpClick = () => {
+    setText(helpText);
   };
 
-  useEffect(() => {
-    fetchText();
-  }, [paras, format]);
-
   return (
-    <div className="App">
-      <header><h1>React sample text generator app</h1></header>
-      <div className="container">
-        <div className="controls">
-          <div className="input-group">
-            <label>Paragraphs</label>
-            <input type="number" value={paras} onChange={(e) => setParas(e.target.value)} />
-          </div>
-          <div className="input-group">
-            <label>Include HTML</label>
-            <select value={format} onChange={(e) => setFormat(e.target.value)}>
-              <option value="text">No</option>
-              <option value="html">Yes</option>
-            </select>
-          </div>
-        </div>
-        <div className="output">{text}</div>
+    <div className="container">
+      <header>
+        <h1>Markdown Previewer</h1>
+        <button className="help-btn" onClick={handleHelpClick}>?</button>
+      </header>
+
+      <div className="editor-wrap">
+        {/* Sol Taraf: Giriş Alanı */}
+        <textarea
+          className="editor"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Markdown yazmaya başla..."
+        />
+
+        {/* Sağ Taraf: Önizleme Alanı */}
+        <div 
+          className="preview"
+          dangerouslySetInnerHTML={{ __html: marked(text) }}
+        ></div>
       </div>
     </div>
   );
 }
+
 export default App;
