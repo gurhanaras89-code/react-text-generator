@@ -21,7 +21,7 @@ Shopping list:
 function App() {
   const [text, setText] = useState("");
 
-  // Sağ üstteki soru işaretine basınca örnek metni doldurur
+  
   const handleHelpClick = () => {
     setText(helpText);
   };
@@ -34,7 +34,7 @@ function App() {
       </header>
 
       <div className="editor-wrap">
-        {/* Sol Taraf: Giriş Alanı */}
+       
         <textarea
           className="editor"
           value={text}
@@ -42,7 +42,7 @@ function App() {
           placeholder="Markdown yazmaya başla..."
         />
 
-        {/* Sağ Taraf: Önizleme Alanı */}
+        
         <div 
           className="preview"
           dangerouslySetInnerHTML={{ __html: marked(text) }}
